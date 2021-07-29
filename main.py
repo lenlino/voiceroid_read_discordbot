@@ -3,7 +3,7 @@ import asyncio
 import discord
 import pyvcroid2
 
-token = "TOKEN"
+token = "ODYwODI3MTc0NTQxNzIxNjAw.YOA5xw.EP_2t-mAipSejnueBIAjLN0APxk"
 
 client = discord.Client()
 
@@ -22,6 +22,9 @@ async def on_message(message):
     voice = discord.utils.get(client.voice_clients, guild=message.guild)
 
     if message.content == ".vc":
+        if message.author.voice.channel is None:
+            await message.channel.send("音声チャンネルに入っていないため操作できません")
+            return
         if voice is not None:
             del chlist[message.guild.id]
             await message.guild.voice_client.disconnect()
