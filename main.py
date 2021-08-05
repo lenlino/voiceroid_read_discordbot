@@ -3,7 +3,7 @@ import asyncio
 import discord
 import pyvcroid2
 
-token = "ODYwODI3MTc0NTQxNzIxNjAw.YOA5xw.EP_2t-mAipSejnueBIAjLN0APxk"
+token = "token"
 
 client = discord.Client()
 
@@ -22,7 +22,7 @@ async def on_message(message):
     voice = discord.utils.get(client.voice_clients, guild=message.guild)
 
     if message.content == ".vc":
-        if message.author.voice.channel is None:
+        if message.author.voice is None:
             await message.channel.send("音声チャンネルに入っていないため操作できません")
             return
         if voice is not None:
@@ -46,6 +46,16 @@ async def on_message(message):
         return
 
 
+@client.event
+async def on_voice_state_update(member, before, after):
+    voicestate = member.guild.voice_client
+    if voicestate is None:
+        print("none")
+        return
+    if len(voicestate.channel.members) == 1:
+        await voicestate.disconnect()
+
+
 def text2wav(vc, text):
     filename = "temp.wav"
     speech, tts_events = vc.textToSpeech(text)
@@ -64,7 +74,7 @@ else:
 
 voice_list = vc.listVoices()
 if 0 < len(voice_list):
-    vc.loadVoice(voice_list[0])
+    vc.loadVoice(voice_list[1])
 else:
     raise Exception("No voice library")
 vc.param.volume = 2.0
