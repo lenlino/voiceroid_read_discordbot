@@ -1,9 +1,10 @@
 import asyncio
+import re
 
 import discord
 import pyvcroid2
 
-token = "token"
+token = "ODE0Njg3ODE2MjQ0MTMzODg4.YDhfJw.atwA_oPf1TuGULBzAyEQsAV6iT8"
 
 client = discord.Client()
 
@@ -37,9 +38,18 @@ async def on_message(message):
             return
 
     if voice and voice.is_connected and message.channel.id == chlist[message.guild.id]:
+        pattern = "https?://[\w/:%#\$&\?\(\)~\.=\+\-]+"
+        pattern_emoji = "\<.+?\>"
+
+        output = re.sub(pattern,"URL省略",message.content)
+        output = re.sub(pattern_emoji,"",output)
+        if (len(output)>50):
+            output = "長文省略"
+        print(output)
+
         while message.guild.voice_client.is_playing():
             await asyncio.sleep(0.1)
-        source = discord.FFmpegPCMAudio(text2wav(vc, message.content))
+        source = discord.FFmpegPCMAudio(text2wav(vc, output))
         message.guild.voice_client.play(source)
         return
     else:
@@ -74,6 +84,7 @@ else:
 
 voice_list = vc.listVoices()
 if 0 < len(voice_list):
+    #listの値の変更で声の変更が可能
     vc.loadVoice(voice_list[1])
 else:
     raise Exception("No voice library")
