@@ -1,11 +1,10 @@
 import asyncio
 import re
-import random
 
 import discord
 import pyvcroid2
 
-token = "ODE0Njg3ODE2MjQ0MTMzODg4.YDhfJw.F_0XSu2oi_cArZh1NQN4pqiRaek"
+token = "TOKEN"
 
 bot = discord.Client()
 
